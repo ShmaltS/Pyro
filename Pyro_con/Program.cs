@@ -14,7 +14,6 @@ namespace Pyro_con
         public static byte[,] arr;        
         public static int x_max;
         public static int y_max;
-
         public static int feed_coef;
         public static int feed_diff;
         public static int feed_min;
@@ -23,9 +22,7 @@ namespace Pyro_con
         public static int pix_otkl;
         public static int count_rep;
         public static double line_mm;
-        //public static string conf_file="default.ini";
         public static StreamWriter EWriter = new StreamWriter("Pyro_" + DateTime.Now.ToShortDateString().ToString() + "_" + DateTime.Now.ToShortTimeString().ToString().Replace(':', '.') + ".err", false);
-
 
         static void Main(string[] args)
 
@@ -33,11 +30,9 @@ namespace Pyro_con
             EWriter.AutoFlush = true;
             init(args);
             prg_1();//загрузка исходного файла
-
             prg_3();//оптимизация исходного файла
             prg_2();//вывод GCode
             prg_demo();
-
             EWriter.Close();
         }
 
@@ -302,31 +297,6 @@ namespace Pyro_con
                 out_feed = 1500;
             if (240 < cur_feed & cur_feed <= 256)
                 out_feed = 3000;
-
-            //if (0 <= cur_feed & cur_feed <= 32)
-            //    out_feed = 400;
-
-            //if (32 < cur_feed & cur_feed <= 64)
-            //    out_feed = 550;
-
-            //if (64 < cur_feed & cur_feed <= 96)
-            //    out_feed = 800;
-
-            //if (96 < cur_feed & cur_feed <= 128)
-            //    out_feed = 1000;
-
-            //if (128 < cur_feed & cur_feed <= 160)
-            //    out_feed = 2000;
-
-            //if (160 < cur_feed & cur_feed <= 192)
-            //    out_feed = 3000;
-
-            //if (192 < cur_feed & cur_feed <= 224)
-            //    out_feed = 4000;
-
-            //if (224 < cur_feed & cur_feed <= 256)
-            //    out_feed = 5000;
-
 
             return out_feed;
         }
