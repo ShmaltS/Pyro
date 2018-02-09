@@ -11,7 +11,6 @@ namespace Pyro_con
     class Program
     {
         public static Bitmap bmp_in;
-       // public static Bitmap bmp_out_temp;
         public static byte[,] arr;        
         public static int x_max;
         public static int y_max;
@@ -34,10 +33,26 @@ namespace Pyro_con
             EWriter.AutoFlush = true;
             init(args);
             prg_1();//загрузка исходного файла
-            //prg_3();//оптимизация исходного файла
+
+            prg_3();//оптимизация исходного файла
             prg_2();//вывод GCode
+            prg_demo();
 
             EWriter.Close();
+        }
+
+        static void prg_demo()
+        {
+            Bitmap bmp_out_prev = new Bitmap(x_max, y_max, PixelFormat.Format32bppArgb);
+            int cl;
+            for (int x = 0; x < x_max-1; x++)
+                for (int y = 0; y < y_max-1; y++)
+                {
+                    cl = Convert.ToInt32(get_feed(arr[x,y])/11.77);                    
+                    bmp_out_prev.SetPixel(x, y, Color.FromArgb(cl, cl, cl));
+                }
+            bmp_out_prev.Save("out_prev.bmp");
+            Console.WriteLine("Save out image_prev done");
         }
 
         static bool check_conf(string st)
@@ -113,6 +128,8 @@ namespace Pyro_con
 
                 FReader.Close();
                 bmp_in = new Bitmap(@st_init[0]);
+                x_max = bmp_in.Width;
+                y_max = bmp_in.Height;
                 Console.WriteLine("Configuration loaded");
             }
             else
@@ -129,9 +146,7 @@ namespace Pyro_con
         {
             
             byte arr_max = 0;
-            byte arr_min = 255;
-            x_max = bmp_in.Width;
-            y_max = bmp_in.Height;
+            byte arr_min = 255;            
             arr = new byte[x_max, y_max];
             for (int x = 0; x < x_max; x++)
                 for (int y = 0; y < y_max; y++)
@@ -143,8 +158,8 @@ namespace Pyro_con
                         arr_min = arr[x, y];
                 }
             Console.WriteLine("Calc_done");
-            Console.WriteLine("Размер по X=" + (x_max * line_mm)+" мм");
-            Console.WriteLine("Размер по Y=" + (y_max * line_mm) + " мм");
+            Console.WriteLine("Размер по Y=" + (x_max * line_mm)+" мм");
+            Console.WriteLine("Размер по X=" + (y_max * line_mm) + " мм");
 
         }
 
@@ -205,9 +220,9 @@ namespace Pyro_con
                     if (dir)
                     {
                         GWriter.WriteLine("G91 G01 Y" + Math.Round(line_mm * count_st, 2).ToString().Replace(',', '.') + " F" + feed_last);
-                        GWriter.WriteLine("G91 G01 Y20  F2000");
+                        GWriter.WriteLine("G91 G01 Y20  F8000");
                         GWriter.WriteLine("G91 G01 X" + line_mm.ToString().Replace(',', '.'));
-                        GWriter.WriteLine("G91 G01 Y-20  F2000");
+                        GWriter.WriteLine("G91 G01 Y-20  F8000");
                     }
                     else
                     {
@@ -256,39 +271,62 @@ namespace Pyro_con
         {
             int out_feed = 0;
             if (0 <= cur_feed & cur_feed <= 16)
-                out_feed = 300;
-            if (16 < cur_feed & cur_feed <= 32)
                 out_feed = 400;
+            if (16 < cur_feed & cur_feed <= 32)
+                out_feed = 450;
             if (32 < cur_feed & cur_feed <= 48)
                 out_feed = 500;
             if (48 < cur_feed & cur_feed <= 64)
-                out_feed = 600;
+                out_feed = 550;
             if (64 < cur_feed & cur_feed <= 80)
-                out_feed = 700;
+                out_feed = 600;
             if (80 < cur_feed & cur_feed <= 96)
-                out_feed = 800;
+                out_feed = 650;
             if (96 < cur_feed & cur_feed <= 112)
-                out_feed = 900;
+                out_feed = 700;
             if (112 < cur_feed & cur_feed <= 128)
-                out_feed = 1000;
+                out_feed = 750;
             if (128 < cur_feed & cur_feed <= 144)
-                out_feed = 1100;
+                out_feed = 800;
             if (144 < cur_feed & cur_feed <= 160)
-                out_feed = 1200;
+                out_feed = 900;
             if (160 < cur_feed & cur_feed <= 176)
-                out_feed = 1300;
+                out_feed = 1000;
             if (176 < cur_feed & cur_feed <= 192)
-                out_feed = 1400;
+                out_feed = 1200;
             if (192 < cur_feed & cur_feed <= 208)
-                out_feed = 1500;
+                out_feed = 1300;
             if (208 < cur_feed & cur_feed <= 224)
-                out_feed = 1600;
+                out_feed = 1500;
             if (224 < cur_feed & cur_feed <= 240)
-
-                out_feed = 1700;
+                out_feed = 1500;
             if (240 < cur_feed & cur_feed <= 256)
-                
-                out_feed = 1800;
+                out_feed = 3000;
+
+            //if (0 <= cur_feed & cur_feed <= 32)
+            //    out_feed = 400;
+
+            //if (32 < cur_feed & cur_feed <= 64)
+            //    out_feed = 550;
+
+            //if (64 < cur_feed & cur_feed <= 96)
+            //    out_feed = 800;
+
+            //if (96 < cur_feed & cur_feed <= 128)
+            //    out_feed = 1000;
+
+            //if (128 < cur_feed & cur_feed <= 160)
+            //    out_feed = 2000;
+
+            //if (160 < cur_feed & cur_feed <= 192)
+            //    out_feed = 3000;
+
+            //if (192 < cur_feed & cur_feed <= 224)
+            //    out_feed = 4000;
+
+            //if (224 < cur_feed & cur_feed <= 256)
+            //    out_feed = 5000;
+
 
             return out_feed;
         }
