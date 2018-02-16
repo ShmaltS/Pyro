@@ -215,9 +215,9 @@ namespace Pyro_con
                     if (dir)
                     {
                         GWriter.WriteLine("G91 G01 Y" + Math.Round(line_mm * count_st, 2).ToString().Replace(',', '.') + " F" + feed_last);
-                        GWriter.WriteLine("G91 G01 Y20  F8000");
+                        GWriter.WriteLine("G91 G01 Y10  F8000");
                         GWriter.WriteLine("G91 G01 X" + line_mm.ToString().Replace(',', '.'));
-                        GWriter.WriteLine("G91 G01 Y-20  F8000");
+                        GWriter.WriteLine("G91 G01 Y-10  F8000");
                     }
                     else
                     {
